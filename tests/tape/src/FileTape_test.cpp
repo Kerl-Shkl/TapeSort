@@ -58,19 +58,16 @@ protected:
 
 TEST_F(FileTapeTest, successReadFromFullFile)
 {
-    decltype(numbers) readedNumbers;
     for (size_t i = 0; i < numbers.size(); ++i) {
         uint32_t number;
         if (full.read(number)) {
-            readedNumbers[i] = number;
             full.stepForward();
+            ASSERT_EQ(number, numbers[i]);
         }
         else {
             break;
         }
     }
-
-    EXPECT_EQ(numbers, readedNumbers);
 }
 
 TEST_F(FileTapeTest, errorReadFromEmptyFile)
@@ -91,19 +88,16 @@ TEST_F(FileTapeTest, writeRewindRead)
         empty.write(numbers[i]);
     }
     empty.rewind();
-    decltype(numbers) readedNumbers;
     for (size_t i = 0; i < numbers.size(); ++i) {
         uint32_t number;
         if (full.read(number)) {
-            readedNumbers[i] = number;
             full.stepForward();
+            ASSERT_EQ(number, numbers[i]);
         }
         else {
             break;
         }
     }
-
-    EXPECT_EQ(numbers, readedNumbers);
 }
 
 TEST_F(FileTapeTest, allErrorWithNotOpened)

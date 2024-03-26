@@ -6,7 +6,7 @@ function(create_tape_test SOURCE_NAME)
     gtest_discover_tests(${TARGET_NAME})
 endfunction()
 
-set(TEST_FILES FileTape_test.cpp)
+set(TEST_FILES FileTape_test.cpp VectorTape_test.cpp)
 foreach(TEST_FILE ${TEST_FILES})
     create_tape_test(${TEST_FILE})
 endforeach()
