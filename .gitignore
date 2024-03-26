@@ -1,0 +1,6 @@
+.cache
+build
+*.swp
+compile_commands.json
+*.vim
+.nvim.lua
