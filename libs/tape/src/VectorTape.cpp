@@ -2,7 +2,7 @@
 
 bool VectorTape::read(uint32_t& recipient)
 {
-    if (pos >= buffer.size()) {
+    if (pos > actualEnd) {
         return false;
     }
     recipient = buffer[pos];
@@ -12,6 +12,9 @@ bool VectorTape::read(uint32_t& recipient)
 bool VectorTape::write(uint32_t value)
 {
     resizeIfNeeded();
+    if (pos > actualEnd) {
+        actualEnd = pos;
+    }
     buffer[pos] = value;
     return true;
 }
@@ -45,7 +48,7 @@ void VectorTape::setVector(std::vector<uint32_t> vec)
 void VectorTape::resizeIfNeeded()
 {
     if (pos >= buffer.size()) {
-        auto new_size = pos == 0 ? 5 : pos * 2;
+        auto new_size = pos == 0 ? 1 : pos * 2;
         buffer.resize(new_size);
     }
 }

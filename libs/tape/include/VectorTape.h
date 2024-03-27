@@ -21,6 +21,7 @@ private:
 
     std::vector<uint32_t> buffer;
     std::vector<uint32_t>::size_type pos = 0;
+    size_t actualEnd = 0;
 };
 
 #endif  // end of include guard: TAPE_INCLUDE_VECTORTAPE_H
