@@ -28,7 +28,7 @@ TEST_F(VectorTapeTest, successReadFromFullTape)
     }
 }
 
-TEST_F(VectorTapeTest, errorReadFromEmptyFile)
+TEST_F(VectorTapeTest, errorReadFromEmpty)
 {
     uint32_t number;
     EXPECT_FALSE(empty.read(number));

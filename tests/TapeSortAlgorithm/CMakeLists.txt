@@ -6,7 +6,8 @@ function(create_tapesort_test SOURCE_NAME)
     gtest_discover_tests(${TARGET_NAME})
 endfunction()
 
-set(TEST_FILES MergeTapes_test.cpp)
+set(TEST_FILES MergeTapes_test.cpp TapeSortMergeToDestination_test.cpp
+    TapeSortMergeToInterm_test.cpp)
 foreach(TEST_FILE ${TEST_FILES})
     create_tapesort_test(${TEST_FILE})
 endforeach()

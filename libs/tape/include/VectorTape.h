@@ -15,6 +15,8 @@ public:
     virtual bool rewind() override;
 
     void setVector(std::vector<uint32_t> vec);
+    std::vector<uint32_t>& getVector();
+    const std::vector<uint32_t>& getVector() const;
 
 private:
     void resizeIfNeeded();
