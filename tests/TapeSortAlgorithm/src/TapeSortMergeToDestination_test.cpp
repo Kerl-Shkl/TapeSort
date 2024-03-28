@@ -47,9 +47,8 @@ TEST_F(TapeSortTestMergeToDestination, mergeToDestination)
         bool readed = destination->read(value);
         ASSERT_TRUE(readed);
         ASSERT_EQ(value, expected[i]);
-        destination->stepForward();
     }
-    EXPECT_FALSE(destination->read(value));
+    EXPECT_FALSE(destination->peek(value));
     EXPECT_EQ(sorter.memoryBuffer.size(), 2);
     EXPECT_EQ(sorter.memoryBuffer.front(), 2);
     EXPECT_EQ(sorter.memoryBuffer.back(), 12);

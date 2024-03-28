@@ -18,7 +18,6 @@ private:
     void fillMinValues();
     void placeValuesOnDest();
     void placeMinimumValueOnDest();
-    uint32_t getAnotherValue(TapePtr tape, bool& end);
 
     TapePtr dest;
     std::vector<TapePtr>& sourceTapes;

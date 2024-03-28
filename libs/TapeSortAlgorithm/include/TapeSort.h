@@ -23,7 +23,6 @@ private:
     void fillBuffer();
     void sortBuffer();
     void dumpBufferToTape(TapePtr& tape);
-    void freeFilledIntermTapes();
     bool needMerge() const;
     void mergeToDestination();
     void mergeToInterm();
@@ -35,7 +34,7 @@ private:
     std::vector<TapePtr> emptyIntermTapes;
     std::vector<TapePtr> filledIntermTapes;
     std::vector<uint32_t> memoryBuffer;
-    size_t memoryCapacity;
+    const size_t memoryCapacity;
     bool destinationBusy = false;
     bool sourceEnds = false;
 };

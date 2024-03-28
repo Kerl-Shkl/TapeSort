@@ -35,9 +35,9 @@ private:
     {
         std::vector<TapePtr>::size_type tapeIndex = 0;
         for (uint32_t number : numbers) {
+
             helpTapes[tapeIndex]->write(number);
-            helpTapes[tapeIndex]->stepForward();
-            tapeIndex = tapeIndex+1 >= helpTapes.size() ? 0 : tapeIndex + 1;
+            tapeIndex = tapeIndex + 1 >= helpTapes.size() ? 0 : tapeIndex + 1;
         }
     }
 };
@@ -51,7 +51,6 @@ TEST_F(MergeTapesTest, testMerge)
         uint32_t number;
         bool readed = destination->read(number);
         ASSERT_TRUE(readed);
-        destination->stepForward();
         ASSERT_EQ(numbers[i], number);
     }
 }

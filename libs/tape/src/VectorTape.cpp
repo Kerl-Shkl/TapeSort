@@ -2,6 +2,24 @@
 
 bool VectorTape::read(uint32_t& recipient)
 {
+    bool peekSuccess = peek(recipient);
+    if (peekSuccess) {
+        stepForward();
+    }
+    return peekSuccess;
+}
+
+bool VectorTape::write(uint32_t value)
+{
+    bool putSuccess = put(value);
+    if (putSuccess) {
+        stepForward();
+    }
+    return putSuccess;
+}
+
+bool VectorTape::peek(uint32_t& recipient)
+{
     if (pos >= actualEnd) {
         return false;
     }
@@ -9,7 +27,7 @@ bool VectorTape::read(uint32_t& recipient)
     return true;
 }
 
-bool VectorTape::write(uint32_t value)
+bool VectorTape::put(uint32_t value)
 {
     resizeIfNeeded();
     if (pos >= actualEnd) {
@@ -38,6 +56,12 @@ bool VectorTape::rewind()
 {
     pos = 0;
     return true;
+}
+
+bool VectorTape::clear()
+{
+    actualEnd = 0;
+    return rewind();
 }
 
 void VectorTape::setVector(std::vector<uint32_t> vec)

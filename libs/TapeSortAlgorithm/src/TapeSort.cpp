@@ -13,7 +13,7 @@ TapeSort::TapeSort(TapePtr source, TapePtr destination, size_t memoryCap)
 
 void TapeSort::addIntermTape(TapePtr tape)
 {
-    tape->rewind();
+    tape->clear();
     emptyIntermTapes.emplace_back(std::move(tape));
 }
 
@@ -27,7 +27,6 @@ void TapeSort::fillBuffer()
     for (size_t i = 0; i < memoryBuffer.size(); ++i) {
         uint32_t value;
         if (source->read(value)) {
-            source->stepForward();
             memoryBuffer[i] = value;
         }
         else {
@@ -41,8 +40,8 @@ void TapeSort::fillBuffer()
 void TapeSort::dumpBufferToTape(TapePtr& tape)
 {
     for (uint32_t value : memoryBuffer) {
+        // TODO check success
         tape->write(value);
-        tape->stepForward();
     }
 }
 
@@ -54,16 +53,6 @@ void TapeSort::sortBuffer()
 bool TapeSort::needMerge() const
 {
     return destinationBusy && emptyIntermTapes.size() == 1;
-}
-
-void TapeSort::freeFilledIntermTapes()
-{
-    if (destinationBusy) {
-        filledIntermTapes.pop_back();
-    }
-    while (!filledIntermTapes.empty()) {
-        filledIntermTapes.back()->rewind();
-    }
 }
 
 void TapeSort::mergeToDestination()
@@ -103,7 +92,7 @@ void TapeSort::clearAfterMergeToInterm()
     assert(emptyIntermTapes.size() == 1 && destinationBusy);
     filledIntermTapes.pop_back();  // release memory buffer
     filledIntermTapes.pop_back();  // release destination
-    destination->rewind();
+    destination->clear();
     destinationBusy = false;
 
     TapePtr receiver = std::move(emptyIntermTapes.front());
@@ -111,7 +100,7 @@ void TapeSort::clearAfterMergeToInterm()
     receiver->rewind();
 
     for (auto& intermTape : filledIntermTapes) {
-        intermTape->rewind();
+        intermTape->clear();
         emptyIntermTapes.emplace_back(std::move(intermTape));
     }
     filledIntermTapes.clear();

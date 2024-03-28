@@ -27,9 +27,8 @@ protected:
         for (uint32_t number : numbers) {
             fullFile.write(reinterpret_cast<char *>(&number), sizeof(number));
         }
-        fullFile.seekp(0, ios_base::beg);
-        fullFile.seekg(0, ios_base::beg);
         full.setFstream(std::move(fullFile));
+        full.rewind();
     }
 
     void setEmptyFile()
@@ -58,22 +57,19 @@ protected:
 
 TEST_F(FileTapeTest, successReadFromFullFile)
 {
+    uint32_t number;
     for (size_t i = 0; i < numbers.size(); ++i) {
-        uint32_t number;
-        if (full.read(number)) {
-            full.stepForward();
-            ASSERT_EQ(number, numbers[i]);
-        }
-        else {
-            break;
-        }
+        bool readed = full.read(number);
+        ASSERT_TRUE(readed);
+        ASSERT_EQ(number, numbers[i]);
     }
+    EXPECT_FALSE(full.peek(number));
 }
 
 TEST_F(FileTapeTest, errorReadFromEmptyFile)
 {
     uint32_t number;
-    EXPECT_FALSE(empty.read(number));
+    EXPECT_FALSE(empty.peek(number));
 }
 
 TEST_F(FileTapeTest, errorOnStepBeforeBegin)
@@ -88,23 +84,29 @@ TEST_F(FileTapeTest, writeRewindRead)
         empty.write(numbers[i]);
     }
     empty.rewind();
+
+    uint32_t number;
     for (size_t i = 0; i < numbers.size(); ++i) {
-        uint32_t number;
-        if (full.read(number)) {
-            full.stepForward();
-            ASSERT_EQ(number, numbers[i]);
-        }
-        else {
-            break;
-        }
+        bool readed = empty.read(number);
+        ASSERT_TRUE(readed);
+        ASSERT_EQ(number, numbers[i]);
     }
+    EXPECT_FALSE(empty.peek(number));
+}
+
+TEST_F(FileTapeTest, clearFullFile)
+{
+    uint32_t number;
+    EXPECT_TRUE(full.peek(number));
+    full.clear();
+    EXPECT_FALSE(full.peek(number));
 }
 
 TEST_F(FileTapeTest, allErrorWithNotOpened)
 {
     uint32_t number = 0;
-    EXPECT_FALSE(notOpened.write(number));
-    EXPECT_FALSE(notOpened.read(number));
+    EXPECT_FALSE(notOpened.put(number));
+    EXPECT_FALSE(notOpened.peek(number));
     EXPECT_FALSE(notOpened.stepForward());
     EXPECT_FALSE(notOpened.stepBackward());
     EXPECT_FALSE(notOpened.rewind());

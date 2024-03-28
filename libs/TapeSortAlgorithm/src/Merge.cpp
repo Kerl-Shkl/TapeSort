@@ -17,7 +17,6 @@ void MergeTapes::fillMinValues()
         tape->rewind();
         uint32_t number;
         if (tape->read(number)) {
-            tape->stepForward();
             minValues.insert({number, tape});
         }
     }
@@ -33,26 +32,13 @@ void MergeTapes::placeValuesOnDest()
 void MergeTapes::placeMinimumValueOnDest()
 {
     auto minimumElem = minValues.begin();
-    bool tapeEnds;
-    uint32_t anotherValue = getAnotherValue(minimumElem->second, tapeEnds);
-    if (!tapeEnds) {
+    uint32_t anotherValue;  //= getAnotherValue(minimumElem->second, tapeEnds);
+    bool tapeNotEnds = minimumElem->second->read(anotherValue);
+    if (tapeNotEnds) {
         minValues.insert({anotherValue, minimumElem->second});
     }
     // TODO add throw
     dest->write(minimumElem->first);
-    dest->stepForward();
     minValues.erase(minimumElem);
 }
 
-uint32_t MergeTapes::getAnotherValue(TapePtr tape, bool& end)
-{
-    uint32_t result;
-    if (tape->read(result)) {
-        tape->stepForward();
-        end = false;
-    }
-    else {
-        end = true;
-    }
-    return result;
-}

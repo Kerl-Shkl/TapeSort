@@ -16,22 +16,19 @@ protected:
 
 TEST_F(VectorTapeTest, successReadFromFullTape)
 {
+    uint32_t number;
     for (size_t i = 0; i < numbers.size(); ++i) {
-        uint32_t number;
-        if (full.read(number)) {
-            full.stepForward();
-            ASSERT_EQ(number, numbers[i]);
-        }
-        else {
-            break;
-        }
+        bool readed = full.read(number);
+        ASSERT_TRUE(readed);
+        ASSERT_EQ(number, numbers[i]);
     }
+    EXPECT_FALSE(full.peek(number));
 }
 
 TEST_F(VectorTapeTest, errorReadFromEmpty)
 {
     uint32_t number;
-    EXPECT_FALSE(empty.read(number));
+    EXPECT_FALSE(empty.peek(number));
 }
 
 TEST_F(VectorTapeTest, errorOnStepBeforeBegin)
@@ -44,17 +41,14 @@ TEST_F(VectorTapeTest, writeRewindRead)
 {
     for (size_t i = 0; i < numbers.size(); ++i) {
         empty.write(numbers[i]);
-        empty.stepForward();
     }
     empty.rewind();
+
+    uint32_t number;
     for (size_t i = 0; i < numbers.size(); ++i) {
-        uint32_t number;
-        if (full.read(number)) {
-            full.stepForward();
-            ASSERT_EQ(numbers[i], number);
-        }
-        else {
-            break;
-        }
+        bool readed = empty.read(number);
+        ASSERT_TRUE(readed);
+        ASSERT_EQ(numbers[i], number);
     }
+    EXPECT_FALSE(empty.peek(number));
 }
