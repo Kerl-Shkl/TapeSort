@@ -1,4 +1,5 @@
 #include "VectorTape.h"
+#include "TapeFunctoins.h"
 #include <gtest/gtest.h>
 
 class VectorTapeTest : public testing::Test
@@ -10,8 +11,8 @@ protected:
     }
 
     std::vector<uint32_t> numbers = {13, 15, 21, 81, 92};
-    VectorTape full;
-    VectorTape empty;
+    tape::VectorTape full;
+    tape::VectorTape empty;
 };
 
 TEST_F(VectorTapeTest, successReadFromFullTape)
@@ -51,4 +52,24 @@ TEST_F(VectorTapeTest, writeRewindRead)
         ASSERT_EQ(numbers[i], number);
     }
     EXPECT_FALSE(empty.peek(number));
+}
+
+TEST_F(VectorTapeTest, copyTape)
+{
+    bool copyed = tape::copyTape(empty, full);
+    ASSERT_TRUE(copyed);
+
+    empty.rewind();
+    full.rewind();
+    uint32_t val1, val2;
+    bool readed;
+    do {
+        readed = empty.read(val1);
+        readed &= full.read(val2);
+        if (readed) {
+            ASSERT_EQ(val1, val2);
+        }
+    } while (readed);
+    EXPECT_FALSE(empty.peek(val1));
+    EXPECT_FALSE(full.peek(val2));
 }

@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+namespace tape {
+
 class ITape
 {
 public:
@@ -16,5 +18,7 @@ public:
     virtual bool rewind() = 0;
     virtual bool clear() = 0;
 };
+
+}  // namespace tape
 
 #endif  // end of include guard: TAPE_INCLUDE_ITAPE_H

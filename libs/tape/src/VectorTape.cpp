@@ -1,5 +1,7 @@
 #include "VectorTape.h"
 
+namespace tape {
+
 bool VectorTape::read(uint32_t& recipient)
 {
     bool peekSuccess = peek(recipient);
@@ -87,3 +89,5 @@ void VectorTape::resizeIfNeeded()
         buffer.resize(new_size);
     }
 }
+
+}  // namespace tape

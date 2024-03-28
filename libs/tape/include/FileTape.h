@@ -4,6 +4,8 @@
 #include "ITape.h"
 #include <fstream>
 
+namespace tape {
+
 class FileTape : public ITape
 {
 public:
@@ -29,5 +31,7 @@ private:
     std::fstream::pos_type actualEnd;
     static constexpr auto block_size = sizeof(uint32_t);
 };
+
+}  // namespace tape
 
 #endif  // end of include guard: TAPE_INCLUDE_FILETAPE_H

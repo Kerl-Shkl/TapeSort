@@ -1,4 +1,5 @@
 #include "FileTape.h"
+#include "TapeFunctoins.h"
 #include <filesystem>
 #include <gtest/gtest.h>
 
@@ -50,9 +51,9 @@ protected:
     }
 
     std::array<uint32_t, 4> numbers = {12, 31, 15, 65};
-    FileTape empty;
-    FileTape full;
-    FileTape notOpened;
+    tape::FileTape empty;
+    tape::FileTape full;
+    tape::FileTape notOpened;
 };
 
 TEST_F(FileTapeTest, successReadFromFullFile)
@@ -110,4 +111,24 @@ TEST_F(FileTapeTest, allErrorWithNotOpened)
     EXPECT_FALSE(notOpened.stepForward());
     EXPECT_FALSE(notOpened.stepBackward());
     EXPECT_FALSE(notOpened.rewind());
+}
+
+TEST_F(FileTapeTest, copyTape)
+{
+    bool copyed = tape::copyTape(empty, full);
+    ASSERT_TRUE(copyed);
+
+    empty.rewind();
+    full.rewind();
+    uint32_t val1, val2;
+    bool readed;
+    do {
+        readed = empty.read(val1);
+        readed &= full.read(val2);
+        if (readed) {
+            ASSERT_EQ(val1, val2);
+        }
+    } while (readed);
+    EXPECT_FALSE(empty.peek(val1));
+    EXPECT_FALSE(full.peek(val2));
 }

@@ -4,6 +4,8 @@
 #include "ITape.h"
 #include <vector>
 
+namespace tape {
+
 class VectorTape : public ITape
 {
 public:
@@ -28,5 +30,7 @@ private:
     std::vector<uint32_t>::size_type pos = 0;
     size_t actualEnd = 0;
 };
+
+}  // namespace tape
 
 #endif  // end of include guard: TAPE_INCLUDE_VECTORTAPE_H

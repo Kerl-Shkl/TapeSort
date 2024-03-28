@@ -1,5 +1,7 @@
 #include "FileTape.h"
 
+namespace tape {
+
 FileTape::FileTape(std::fstream&& tapeFile)
 : file(std::move(tapeFile))
 {}
@@ -80,3 +82,5 @@ bool FileTape::isOkStateAndClear()
     }
     return true;
 }
+
+}  // namespace tape
