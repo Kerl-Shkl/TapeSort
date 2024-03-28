@@ -41,4 +41,3 @@ void MergeTapes::placeMinimumValueOnDest()
     dest->write(minimumElem->first);
     minValues.erase(minimumElem);
 }
-

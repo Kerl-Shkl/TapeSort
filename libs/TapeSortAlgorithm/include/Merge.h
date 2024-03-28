@@ -9,7 +9,7 @@
 class MergeTapes
 {
 public:
-    using TapePtr = std::shared_ptr<ITape>;
+    using TapePtr = std::shared_ptr<tape::ITape>;
 
     MergeTapes(TapePtr dest, std::vector<TapePtr>& sourceTapes);
     void merge();

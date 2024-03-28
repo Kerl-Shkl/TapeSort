@@ -1,5 +1,6 @@
 #include "TapeSort.h"
 #include "Merge.h"
+#include "TapeFunctoins.h"
 #include "VectorTape.h"
 #include <algorithm>
 #include <cassert>
@@ -15,6 +16,17 @@ void TapeSort::addIntermTape(TapePtr tape)
 {
     tape->clear();
     emptyIntermTapes.emplace_back(std::move(tape));
+}
+
+void TapeSort::sort()
+{
+    allocateMemoryBuffer();
+    while (!sourceEnds) {
+        fillBuffer();
+        sortBuffer();
+        dumpBufferIfNeeded();
+    }
+    fillDestination();
 }
 
 void TapeSort::allocateMemoryBuffer()
@@ -37,17 +49,55 @@ void TapeSort::fillBuffer()
     }
 }
 
-void TapeSort::dumpBufferToTape(TapePtr& tape)
-{
-    for (uint32_t value : memoryBuffer) {
-        // TODO check success
-        tape->write(value);
-    }
-}
-
 void TapeSort::sortBuffer()
 {
     std::sort(memoryBuffer.begin(), memoryBuffer.end());
+}
+
+void TapeSort::dumpBufferIfNeeded()
+{
+    if (sourceEnds) {
+        return;
+    }
+    if (needMerge()) {
+        mergeToInterm();
+    }
+    else {
+        fillAnotherIntermTape();
+    }
+}
+
+void TapeSort::dumpBufferToTape(TapePtr& tape)
+{
+    for (uint32_t value : memoryBuffer) {
+        tape->write(value);  // TODO check success
+    }
+}
+
+void TapeSort::fillDestination()
+{
+    if (!destinationBusy) {
+        mergeToDestination();
+    }
+    else {
+        mergeToInterm();
+        tape::copyTape(*destination, *filledIntermTapes.front());
+    }
+}
+
+void TapeSort::fillAnotherIntermTape()
+{
+    if (emptyIntermTapes.size() > 1) {
+        auto& anotherTape = emptyIntermTapes.back();
+        dumpBufferToTape(anotherTape);
+        filledIntermTapes.emplace_back(std::move(anotherTape));
+        emptyIntermTapes.pop_back();
+    }
+    else {
+        dumpBufferToTape(destination);
+        destinationBusy = true;
+        filledIntermTapes.push_back(destination);
+    }
 }
 
 bool TapeSort::needMerge() const
@@ -77,9 +127,9 @@ void TapeSort::mergeToInterm()
 
 void TapeSort::addMemoryBufferToFilledIntermTapes()
 {
-    auto memTapePtr =
-        std::shared_ptr<VectorTape>(new VectorTape, [this](ITape *tape) {
-            VectorTape *vecTape = dynamic_cast<VectorTape *>(tape);
+    auto memTapePtr = std::shared_ptr<tape::VectorTape>(
+        new tape::VectorTape, [this](tape::ITape *tape) {
+            tape::VectorTape *vecTape = dynamic_cast<tape::VectorTape *>(tape);
             memoryBuffer = std::move(vecTape->getVector());
             delete tape;
         });

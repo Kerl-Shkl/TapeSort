@@ -5,7 +5,7 @@
 class MergeTapesTest : public testing::Test
 {
 protected:
-    using TapePtr = std::shared_ptr<ITape>;
+    using TapePtr = std::shared_ptr<tape::ITape>;
 
     void SetUp() override
     {
@@ -21,13 +21,13 @@ protected:
 private:
     void createDestination()
     {
-        destination = std::make_shared<VectorTape>();
+        destination = std::make_shared<tape::VectorTape>();
     }
 
     void createHelpTapes()
     {
         for (int i = 0; i < 4; ++i) {
-            helpTapes.emplace_back(std::make_shared<VectorTape>());
+            helpTapes.emplace_back(std::make_shared<tape::VectorTape>());
         }
     }
 

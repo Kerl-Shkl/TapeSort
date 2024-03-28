@@ -8,7 +8,7 @@
 class TapeSort
 {
 public:
-    using TapePtr = std::shared_ptr<ITape>;
+    using TapePtr = std::shared_ptr<tape::ITape>;
 
     TapeSort(TapePtr source, TapePtr destination, size_t memoryCap);
     void addIntermTape(TapePtr tape);
@@ -22,7 +22,10 @@ private:
     void allocateMemoryBuffer();
     void fillBuffer();
     void sortBuffer();
+    void dumpBufferIfNeeded();
     void dumpBufferToTape(TapePtr& tape);
+    void fillDestination();
+    void fillAnotherIntermTape();
     bool needMerge() const;
     void mergeToDestination();
     void mergeToInterm();

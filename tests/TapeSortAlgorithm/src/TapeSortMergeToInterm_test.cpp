@@ -19,23 +19,24 @@ public:
 class TapeSortTestMergeToInterm : public testing::Test
 {
 protected:
-    using TapePtr = std::shared_ptr<ITape>;
+    using TapePtr = std::shared_ptr<tape::ITape>;
 
     TapeSortTestMergeToInterm()
-    : destination(std::make_shared<VectorTape>())
+    : destination(std::make_shared<tape::VectorTape>())
     , sorter(source, destination, 2)
     {}
 
     void SetUp() override
     {
-        auto filledInterm = std::make_shared<VectorTape>();
+        auto filledInterm = std::make_shared<tape::VectorTape>();
         filledInterm->setVector({1, 11});
         sorter.filledIntermTapes.emplace_back(std::move(filledInterm));
         destination->write(3);
         destination->write(13);
         sorter.destinationBusy = true;
         sorter.memoryBuffer = {2, 12};
-        sorter.emptyIntermTapes.emplace_back(std::make_shared<VectorTape>());
+        sorter.emptyIntermTapes.emplace_back(
+            std::make_shared<tape::VectorTape>());
     }
 
     TapePtr source = nullptr;
