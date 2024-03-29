@@ -4,6 +4,7 @@
 #include "VectorTape.h"
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 
 TapeSort::TapeSort(TapePtr source, TapePtr destination, size_t memoryCap)
 : source(std::move(source))
@@ -20,6 +21,8 @@ void TapeSort::addIntermTape(TapePtr tape)
 
 void TapeSort::sort()
 {
+    source->rewind();
+    destination->clear();
     allocateMemoryBuffer();
     while (!sourceEnds) {
         fillBuffer();
@@ -60,10 +63,20 @@ void TapeSort::dumpBufferIfNeeded()
         return;
     }
     if (needMerge()) {
-        mergeToInterm();
+        merge();
     }
     else {
         fillAnotherIntermTape();
+    }
+}
+
+void TapeSort::merge()
+{
+    if (destinationBusy) {
+        mergeToInterm();
+    }
+    else {
+        mergeToDestination();
     }
 }
 
@@ -82,6 +95,7 @@ void TapeSort::fillDestination()
     else {
         mergeToInterm();
         tape::copyTape(*destination, *filledIntermTapes.front());
+        destination->rewind();
     }
 }
 
@@ -102,7 +116,9 @@ void TapeSort::fillAnotherIntermTape()
 
 bool TapeSort::needMerge() const
 {
-    return destinationBusy && emptyIntermTapes.size() == 1;
+    assert((destinationBusy && !emptyIntermTapes.empty()) || !destinationBusy);
+    return (destinationBusy && emptyIntermTapes.size() == 1) ||
+           emptyIntermTapes.empty();
 }
 
 void TapeSort::mergeToDestination()
@@ -111,14 +127,13 @@ void TapeSort::mergeToDestination()
     addMemoryBufferToFilledIntermTapes();
     MergeTapes merger(destination, filledIntermTapes);
     merger.merge();
-    destination->rewind();
-    filledIntermTapes.pop_back();  // release memoryBuffer
+    clearAfterMergeToDestination();
 }
 
 void TapeSort::mergeToInterm()
 {
     assert(emptyIntermTapes.size() == 1 && destinationBusy);
-    filledIntermTapes.push_back(destination);
+    // filledIntermTapes.push_back(destination);
     addMemoryBufferToFilledIntermTapes();
     MergeTapes merger(emptyIntermTapes.front(), filledIntermTapes);
     merger.merge();
@@ -149,11 +164,25 @@ void TapeSort::clearAfterMergeToInterm()
     emptyIntermTapes.pop_back();
     receiver->rewind();
 
+    clearFilledIntermTapes();
+
+    filledIntermTapes.emplace_back(std::move(receiver));
+}
+
+void TapeSort::clearAfterMergeToDestination()
+{
+    destination->rewind();
+    destinationBusy = true;
+    filledIntermTapes.pop_back();  // release memoryBuffer
+    clearFilledIntermTapes();
+    filledIntermTapes.push_back(destination);
+}
+
+void TapeSort::clearFilledIntermTapes()
+{
     for (auto& intermTape : filledIntermTapes) {
         intermTape->clear();
         emptyIntermTapes.emplace_back(std::move(intermTape));
     }
     filledIntermTapes.clear();
-
-    filledIntermTapes.emplace_back(std::move(receiver));
 }

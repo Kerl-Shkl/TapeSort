@@ -27,10 +27,15 @@ private:
     void fillDestination();
     void fillAnotherIntermTape();
     bool needMerge() const;
+    void merge();
     void mergeToDestination();
     void mergeToInterm();
     void addMemoryBufferToFilledIntermTapes();
     void clearAfterMergeToInterm();
+    void clearAfterMergeToDestination();
+    void clearFilledIntermTapes();
+
+    void printState();
 
     TapePtr source;
     TapePtr destination;
