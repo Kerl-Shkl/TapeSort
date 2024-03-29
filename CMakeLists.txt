@@ -14,6 +14,7 @@ file(GLOB HEADER_FILES include/*.h)
 
 add_executable(exec ${SOURCE_FILES} ${HEADER_FILES})
 target_include_directories(exec PRIVATE include)
+target_link_libraries(exec PRIVATE Tape)
 add_compile_options(-Wall -Wextra -Wno-missing-field-initializers -Wpedantic -Wconversion)
 
 if(BUILD_TESTS)

@@ -14,14 +14,14 @@ public:
 
     TapeTimeModel(std::unique_ptr<ITape> origin);
     ~TapeTimeModel() override = default;
-    bool read(uint32_t& buffer) override = 0;
-    bool write(uint32_t value) override = 0;
-    bool peek(uint32_t& buffer) override = 0;
-    bool put(uint32_t value) override = 0;
-    bool stepForward() override = 0;
-    bool stepBackward() override = 0;
-    bool rewind() override = 0;
-    bool clear() override = 0;
+    bool read(uint32_t& buffer) override;
+    bool write(uint32_t value) override;
+    bool peek(uint32_t& buffer) override;
+    bool put(uint32_t value) override;
+    bool stepForward() override;
+    bool stepBackward() override;
+    bool rewind() override;
+    bool clear() override;
 
     void setStepDelay(const milliseconds& delay);
     void setReadDelay(const milliseconds& delay);
