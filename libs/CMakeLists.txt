@@ -1,2 +1,2 @@
-add_subdirectory(tape)
+add_subdirectory(Tape)
 add_subdirectory(TapeSortAlgorithm)
