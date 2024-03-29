@@ -34,6 +34,7 @@ protected:
         destination->write(3);
         destination->write(13);
         sorter.destinationBusy = true;
+        sorter.filledIntermTapes.push_back(destination);
         sorter.memoryBuffer = {2, 12};
         sorter.emptyIntermTapes.emplace_back(
             std::make_shared<tape::VectorTape>());
@@ -50,14 +51,14 @@ TEST_F(TapeSortTestMergeToInterm, mergeToInterm)
     sorter.mergeToInterm();
 
     ASSERT_EQ(sorter.filledIntermTapes.size(), 1);
-    auto dest = sorter.filledIntermTapes.front();
+    auto result = sorter.filledIntermTapes.front();
     uint32_t value;
     for (size_t i = 0; i < expected.size(); ++i) {
-        bool readed = dest->read(value);
+        bool readed = result->read(value);
         ASSERT_TRUE(readed);
         ASSERT_EQ(value, expected[i]);
     }
-    EXPECT_FALSE(dest->peek(value));
+    EXPECT_FALSE(result->peek(value));
     EXPECT_EQ(sorter.memoryBuffer.size(), 2);
     EXPECT_EQ(sorter.memoryBuffer.front(), 2);
     EXPECT_EQ(sorter.memoryBuffer.back(), 12);

@@ -5,7 +5,7 @@
 class MergeTapesTest : public testing::Test
 {
 protected:
-    using TapePtr = std::shared_ptr<tape::ITape>;
+    using TapePtr = std::shared_ptr<tape::VectorTape>;
 
     void SetUp() override
     {
@@ -15,7 +15,7 @@ protected:
     }
 
     std::vector<uint32_t> numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-    std::vector<TapePtr> helpTapes;
+    std::vector<std::shared_ptr<tape::ITape>> helpTapes;
     TapePtr destination;
 
 private:
@@ -47,10 +47,11 @@ TEST_F(MergeTapesTest, testMerge)
     MergeTapes merger(destination, helpTapes);
     merger.merge();
     destination->rewind();
+    uint32_t number;
     for (size_t i = 0; i < numbers.size(); ++i) {
-        uint32_t number;
         bool readed = destination->read(number);
         ASSERT_TRUE(readed);
         ASSERT_EQ(numbers[i], number);
     }
+    EXPECT_FALSE(destination->peek(number));
 }

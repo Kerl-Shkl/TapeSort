@@ -11,5 +11,5 @@ enable_testing()
 
 include(GoogleTest)
 
-add_subdirectory(tape)
+add_subdirectory(Tape)
 add_subdirectory(TapeSortAlgorithm)
