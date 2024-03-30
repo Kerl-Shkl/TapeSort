@@ -14,12 +14,14 @@ public:
     void run();
 
 public:
+    using TapePtr = std::shared_ptr<tape::TapeTimeModel>;
+
     bool parseArgs(int argc, char *argv[]);
-    void printUsage(const std::string& exec_name);
+    void printUsage(const std::string& exec_name) const;
     void createTapes();
     void createIntermTapes();
-
-    using TapePtr = std::shared_ptr<tape::TapeTimeModel>;
+    void setTimeSettings(TapePtr& tape) const;
+    void checkSettings() const;
 
     Settings settings;
     std::string settingsFilename = "settings.txt";

@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "FileTape.h"
+#include "TapeSort.h"
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -12,11 +13,14 @@ Application::Application(int argc, char *argv[])
     }
     SettingsReader sr(settingsFilename);
     settings = sr.getSettings();
-    if (settings.intermTapeCount < 1) {
-        std::cout << "The number of intermediate tapes must be at least one"
-                  << std::endl;
-        exit(2);
-    }
+    checkSettings();
+}
+
+void Application::run()
+{
+    createTapes();
+    TapeSort sorter(source, destination, settings.memoryCapacity);
+    sorter.sort();
 }
 
 bool Application::parseArgs(int argc, char *argv[])
@@ -36,7 +40,7 @@ bool Application::parseArgs(int argc, char *argv[])
     return true;
 }
 
-void Application::printUsage(const std::string& exec_name)
+void Application::printUsage(const std::string& exec_name) const
 {
     std::cout
         << "Usage: " << exec_name
@@ -64,9 +68,11 @@ void Application::createTapes()
 
     auto srcFileTape = std::make_unique<tape::FileTape>(std::move(srcStream));
     source = std::make_shared<tape::TapeTimeModel>(std::move(srcFileTape));
+    setTimeSettings(source);
 
     auto dstFileTape = std::make_unique<tape::FileTape>(std::move(dstStream));
     destination = std::make_shared<tape::TapeTimeModel>(std::move(srcFileTape));
+    setTimeSettings(destination);
 
     createIntermTapes();
 }
@@ -82,7 +88,7 @@ void Application::createIntermTapes()
             exit(4);
         }
     }
-    const std::string commonFilename = "interm";
+    const std::string commonFilename = "tmp/interm";
     for (uint32_t i = 0; i < settings.intermTapeCount; ++i) {
         std::string filename = commonFilename + std::to_string(i + 1);
         std::ofstream{filename, ios_base::trunc};
@@ -91,6 +97,30 @@ void Application::createIntermTapes()
         auto fileTape = std::make_unique<tape::FileTape>(std::move(stream));
         auto timeTape =
             std::make_shared<tape::TapeTimeModel>(std::move(fileTape));
+        setTimeSettings(timeTape);
         intermTapes.emplace_back(std::move(timeTape));
+    }
+}
+
+void Application::setTimeSettings(TapePtr& tape) const
+{
+    tape->setReadDelay(settings.readDelay);
+    tape->setWriteDelay(settings.writeDelay);
+    tape->setStepDelay(settings.stepDelay);
+    tape->setRewindDelay(settings.rewindDelay);
+}
+
+void Application::checkSettings() const
+{
+    if (settings.intermTapeCount < 1) {
+        std::cout << "The number of intermediate tapes must be at least one"
+                  << std::endl;
+        exit(2);
+    }
+    if (settings.memoryCapacity < 1) {
+        std::cout << "The size of memory capacity must be at least one (one "
+                     "block = sizeof(uint32_t))"
+                  << std::endl;
+        exit(2);
     }
 }
