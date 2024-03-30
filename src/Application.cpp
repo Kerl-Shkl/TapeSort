@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "FileTape.h"
+#include "TapeInsertSort.h"
 #include "TapeMergeSort.h"
 #include <filesystem>
 #include <fstream>
@@ -30,10 +31,32 @@ void Application::run()
 
 void Application::doSort()
 {
+    if (intermTapes.empty()) {
+        insertSort();
+    }
+    else {
+        mergeSort();
+    }
+}
+
+void Application::mergeSort()
+{
     tape::TapeMergeSort sorter(source, destination, settings.memoryCapacity);
     for (const auto& interm : intermTapes) {
         sorter.addIntermTape(interm);
     }
+    try {
+        sorter.sort();
+    }
+    catch (const std::runtime_error& error) {
+        std::cerr << "[runtime error] " << error.what() << std::endl;
+        exit(7);
+    }
+}
+
+void Application::insertSort()
+{
+    tape::TapeInsertSort sorter(source, destination, settings.memoryCapacity);
     try {
         sorter.sort();
     }
@@ -137,11 +160,6 @@ void Application::setTimeSettings(TapePtr& tape) const
 
 void Application::checkSettings() const
 {
-    if (settings.intermTapeCount < 1) {
-        std::cout << "The number of intermediate tapes must be at least one"
-                  << std::endl;
-        exit(2);
-    }
     if (settings.memoryCapacity < 1) {
         std::cout << "The size of memory capacity must be at least one (one "
                      "block = sizeof(uint32_t))"

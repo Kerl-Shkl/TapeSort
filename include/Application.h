@@ -17,6 +17,8 @@ public:
     using TapePtr = std::shared_ptr<tape::TapeTimeModel>;
 
     void doSort();
+    void mergeSort();
+    void insertSort();
     bool parseArgs(int argc, char *argv[]);
     void printUsage(const std::string& exec_name) const;
     void createTapes();
