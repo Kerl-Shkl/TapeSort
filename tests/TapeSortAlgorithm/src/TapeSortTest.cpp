@@ -1,5 +1,4 @@
-#include "TapeSort.h"
-#include "TapeFunctoins.h"
+#include "TapeMergeSort.h"
 #include "VectorTape.h"
 #include <gtest/gtest.h>
 
@@ -31,7 +30,7 @@ private:
 
 TEST_F(TapeSortTest, sortTestWithThreeInterm)
 {
-    TapeSort sorter(source, destination, 7);
+    tape::TapeMergeSort sorter(source, destination, 7);
     for (int i = 0; i < 3; ++i) {
         auto interm = std::make_shared<tape::VectorTape>();
         sorter.addIntermTape(std::move(interm));
@@ -49,7 +48,7 @@ TEST_F(TapeSortTest, sortTestWithThreeInterm)
 
 TEST_F(TapeSortTest, sortTestWithOneInterm)
 {
-    TapeSort sorter(source, destination, 7);
+    tape::TapeMergeSort sorter(source, destination, 7);
     auto interm = std::make_shared<tape::VectorTape>();
     sorter.addIntermTape(std::move(interm));
     sorter.sort();

@@ -6,6 +6,8 @@
 #include <memory>
 #include <vector>
 
+namespace tape {
+
 class MergeTapes
 {
 public:
@@ -23,5 +25,7 @@ private:
     std::vector<TapePtr>& sourceTapes;
     std::multimap<uint32_t, TapePtr> minValues;
 };
+
+}  // namespace tape
 
 #endif  // end of include guard: TAPESORTALGORITHM_INCLUDE_MERGE_H

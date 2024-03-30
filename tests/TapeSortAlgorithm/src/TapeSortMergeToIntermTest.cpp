@@ -1,19 +1,19 @@
-#include "TapeSort.h"
+#include "TapeMergeSort.h"
 #include "VectorTape.h"
 #include <gtest/gtest.h>
 
-class PublicMergeTapeSort : public TapeSort
+class PublicMergeTapeSort : public tape::TapeMergeSort
 {
 public:
     PublicMergeTapeSort(TapePtr source, TapePtr destination, size_t memoryCap)
-    : TapeSort(source, destination, memoryCap)
+    : TapeMergeSort(source, destination, memoryCap)
     {}
-    using TapeSort::destinationBusy;
-    using TapeSort::emptyIntermTapes;
-    using TapeSort::filledIntermTapes;
-    using TapeSort::memoryBuffer;
-    using TapeSort::mergeToDestination;
-    using TapeSort::mergeToInterm;
+    using TapeMergeSort::destinationBusy;
+    using TapeMergeSort::emptyIntermTapes;
+    using TapeMergeSort::filledIntermTapes;
+    using TapeMergeSort::memoryBuffer;
+    using TapeMergeSort::mergeToDestination;
+    using TapeMergeSort::mergeToInterm;
 };
 
 class TapeSortTestMergeToInterm : public testing::Test

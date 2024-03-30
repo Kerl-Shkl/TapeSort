@@ -44,7 +44,7 @@ private:
 
 TEST_F(MergeTapesTest, testMerge)
 {
-    MergeTapes merger(destination, helpTapes);
+    tape::MergeTapes merger(destination, helpTapes);
     merger.merge();
     destination->rewind();
     uint32_t number;

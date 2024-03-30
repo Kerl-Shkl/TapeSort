@@ -1,16 +1,18 @@
-#ifndef TAPESORTALGORITHM_INCLUDE_TAPESORT_H
-#define TAPESORTALGORITHM_INCLUDE_TAPESORT_H
+#ifndef TAPESORTALGORITHM_INCLUDE_TAPEMERGESORT_H
+#define TAPESORTALGORITHM_INCLUDE_TAPEMERGESORT_H
 
 #include "ITape.h"
 #include <memory>
 #include <vector>
 
-class TapeSort
+namespace tape {
+
+class TapeMergeSort
 {
 public:
-    using TapePtr = std::shared_ptr<tape::ITape>;
+    using TapePtr = std::shared_ptr<ITape>;
 
-    TapeSort(TapePtr source, TapePtr destination, size_t memoryCap);
+    TapeMergeSort(TapePtr source, TapePtr destination, size_t memoryCap);
     void addIntermTape(TapePtr tape);
     void sort();
 
@@ -47,4 +49,6 @@ private:
     bool sourceEnds = false;
 };
 
-#endif  // end of include guard: TAPESORTALGORITHM_INCLUDE_TAPESORT_H
+}  // namespace tape
+
+#endif  // end of include guard: TAPESORTALGORITHM_INCLUDE_TAPEMERGESORT_H

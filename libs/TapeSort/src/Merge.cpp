@@ -1,5 +1,7 @@
 #include "Merge.h"
 
+namespace tape {
+
 MergeTapes::MergeTapes(TapePtr dest, std::vector<TapePtr>& sourceTapes)
 : dest(std::move(dest))
 , sourceTapes(sourceTapes)
@@ -32,7 +34,7 @@ void MergeTapes::placeValuesOnDest()
 void MergeTapes::placeMinimumValueOnDest()
 {
     auto minimumElem = minValues.begin();
-    uint32_t anotherValue;  //= getAnotherValue(minimumElem->second, tapeEnds);
+    uint32_t anotherValue;
     bool tapeNotEnds = minimumElem->second->read(anotherValue);
     if (tapeNotEnds) {
         minValues.insert({anotherValue, minimumElem->second});
@@ -41,3 +43,5 @@ void MergeTapes::placeMinimumValueOnDest()
     dest->write(minimumElem->first);
     minValues.erase(minimumElem);
 }
+
+}  // namespace tape

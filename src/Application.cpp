@@ -1,6 +1,6 @@
 #include "Application.h"
 #include "FileTape.h"
-#include "TapeSort.h"
+#include "TapeMergeSort.h"
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -19,7 +19,7 @@ Application::Application(int argc, char *argv[])
 void Application::run()
 {
     createTapes();
-    TapeSort sorter(source, destination, settings.memoryCapacity);
+    tape::TapeMergeSort sorter(source, destination, settings.memoryCapacity);
     for (const auto& interm : intermTapes) {
         sorter.addIntermTape(interm);
     }
@@ -62,8 +62,9 @@ void Application::createTapes()
         std::cerr << "Can't open source file: " << sourceFilename << std::endl;
         exit(3);
     }
-    std::fstream dstStream(destinationFilename,
-                           ios_base::in | ios_base::out | ios_base::binary | ios_base::trunc);
+    std::fstream dstStream(destinationFilename, ios_base::in | ios_base::out |
+                                                    ios_base::binary |
+                                                    ios_base::trunc);
     if (!dstStream.is_open()) {
         std::cerr << "Can't open destination file: " << destinationFilename
                   << std::endl;
