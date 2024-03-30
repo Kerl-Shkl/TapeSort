@@ -1,4 +1,5 @@
 #include "Merge.h"
+#include <stdexcept>
 
 namespace tape {
 
@@ -39,8 +40,10 @@ void MergeTapes::placeMinimumValueOnDest()
     if (tapeNotEnds) {
         minValues.insert({anotherValue, minimumElem->second});
     }
-    // TODO add throw
-    dest->write(minimumElem->first);
+    bool writed = dest->write(minimumElem->first);
+    if (!writed) {
+        throw std::runtime_error("Can't merge in destination tape");
+    }
     minValues.erase(minimumElem);
 }
 

@@ -86,7 +86,10 @@ void TapeMergeSort::merge()
 void TapeMergeSort::dumpBufferToTape(TapePtr& tape)
 {
     for (uint32_t value : memoryBuffer) {
-        tape->write(value);  // TODO check success
+        bool writed = tape->write(value);
+        if (!writed) {
+            throw std::runtime_error("Can't write value in tape");
+        }
     }
 }
 

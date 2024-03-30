@@ -11,19 +11,36 @@ Application::Application(int argc, char *argv[])
         printUsage(argv[0]);
         exit(1);
     }
-    SettingsReader sr(settingsFilename);
-    settings = sr.getSettings();
+    try {
+        SettingsReader sr(settingsFilename);
+        settings = sr.getSettings();
+    }
+    catch (const std::runtime_error& error) {
+        std::cerr << "[runtime error] " << error.what() << std::endl;
+        exit(1);
+    }
     checkSettings();
 }
 
 void Application::run()
 {
     createTapes();
+    doSort();
+}
+
+void Application::doSort()
+{
     tape::TapeMergeSort sorter(source, destination, settings.memoryCapacity);
     for (const auto& interm : intermTapes) {
         sorter.addIntermTape(interm);
     }
-    sorter.sort();
+    try {
+        sorter.sort();
+    }
+    catch (const std::runtime_error& error) {
+        std::cerr << "[runtime error] " << error.what() << std::endl;
+        exit(7);
+    }
 }
 
 bool Application::parseArgs(int argc, char *argv[])

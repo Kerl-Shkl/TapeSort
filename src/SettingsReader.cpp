@@ -14,8 +14,7 @@ const Settings& SettingsReader::getSettings()
 {
     std::ifstream in(filename);
     if (!in.is_open()) {
-        // TODO throw
-        return settings;
+        throw std::runtime_error("Can't open settings file");
     }
     std::string line;
     while (std::getline(in, line)) {
@@ -28,7 +27,7 @@ void SettingsReader::parseLine(const std::string& line)
 {
     const auto separator = line.find(':');
     std::string field = line.substr(0, separator);
-    std::string valueStr = line.substr(separator+1, line.size());
+    std::string valueStr = line.substr(separator + 1, line.size());
     trim(field);
     trim(valueStr);
     uint32_t value = std::stoul(valueStr);
