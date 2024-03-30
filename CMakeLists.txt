@@ -12,9 +12,9 @@ add_subdirectory(libs)
 file(GLOB SOURCE_FILES src/*.cpp)
 file(GLOB HEADER_FILES include/*.h)
 
-add_executable(exec ${SOURCE_FILES} ${HEADER_FILES})
-target_include_directories(exec PRIVATE include)
-target_link_libraries(exec PRIVATE TapeSort)
+add_executable(tape_sorter ${SOURCE_FILES} ${HEADER_FILES})
+target_include_directories(tape_sorter PRIVATE include)
+target_link_libraries(tape_sorter PRIVATE TapeSort)
 add_compile_options(-Wall -Wextra -Wno-missing-field-initializers -Wpedantic -Wconversion)
 
 if(BUILD_TESTS)
