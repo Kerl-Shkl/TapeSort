@@ -10,17 +10,17 @@ class FileTape : public ITape
 {
 public:
     FileTape() = default;
-    virtual ~FileTape() override = default;
+    ~FileTape() override = default;
     FileTape(std::fstream&& tapeFile);
 
-    virtual bool read(uint32_t& buffer) override;
-    virtual bool write(uint32_t value) override;
-    virtual bool peek(uint32_t& buffer) override;
-    virtual bool put(uint32_t value) override;
-    virtual bool stepForward() override;
-    virtual bool stepBackward() override;
-    virtual bool rewind() override;
-    virtual bool clear() override;
+    bool read(uint32_t& buffer) override;
+    bool write(uint32_t value) override;
+    bool peek(uint32_t& buffer) override;
+    bool put(uint32_t value) override;
+    bool stepForward() override;
+    bool stepBackward() override;
+    bool rewind() override;
+    bool clear() override;
 
     void setFstream(std::fstream&& stream);
 

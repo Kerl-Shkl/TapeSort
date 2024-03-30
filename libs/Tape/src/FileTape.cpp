@@ -3,11 +3,8 @@
 namespace tape {
 
 FileTape::FileTape(std::fstream&& tapeFile)
-: file(std::move(tapeFile))
 {
-    file.seekg(0, std::ios_base::end);
-    actualEnd = file.tellg();
-    file.seekg(0, std::ios_base::beg);
+    setFstream(std::move(tapeFile));
 }
 
 bool FileTape::read(uint32_t& buffer)

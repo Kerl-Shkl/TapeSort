@@ -21,6 +21,7 @@ protected:
 #else
 private:
 #endif
+    void initSort();
     void allocateMemoryBuffer();
     void fillBuffer();
     void sortBuffer();

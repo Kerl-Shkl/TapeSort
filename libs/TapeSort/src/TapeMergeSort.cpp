@@ -24,15 +24,20 @@ void TapeMergeSort::addIntermTape(TapePtr tape)
 
 void TapeMergeSort::sort()
 {
-    source->rewind();
-    destination->clear();
-    allocateMemoryBuffer();
+    initSort();
     while (!sourceEnds) {
         fillBuffer();
         sortBuffer();
         dumpBufferIfNeeded();
     }
     fillDestination();
+}
+
+void TapeMergeSort::initSort()
+{
+    source->rewind();
+    destination->clear();
+    allocateMemoryBuffer();
 }
 
 void TapeMergeSort::allocateMemoryBuffer()

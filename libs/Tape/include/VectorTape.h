@@ -9,15 +9,15 @@ namespace tape {
 class VectorTape : public ITape
 {
 public:
-    virtual ~VectorTape() = default;
-    virtual bool read(uint32_t& recipient) override;
-    virtual bool write(uint32_t value) override;
-    virtual bool peek(uint32_t& recipient) override;
-    virtual bool put(uint32_t value) override;
-    virtual bool stepForward() override;
-    virtual bool stepBackward() override;
-    virtual bool rewind() override;
-    virtual bool clear() override;
+    ~VectorTape() = default;
+    bool read(uint32_t& recipient) override;
+    bool write(uint32_t value) override;
+    bool peek(uint32_t& recipient) override;
+    bool put(uint32_t value) override;
+    bool stepForward() override;
+    bool stepBackward() override;
+    bool rewind() override;
+    bool clear() override;
 
     void setVector(std::vector<uint32_t> vec);
     std::vector<uint32_t>& getVector();

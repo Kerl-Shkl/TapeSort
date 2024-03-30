@@ -85,7 +85,7 @@ const std::vector<uint32_t>& VectorTape::getVector() const
 void VectorTape::resizeIfNeeded()
 {
     if (pos >= buffer.size()) {
-        auto new_size = pos == 0 ? 1 : pos * 2;
+        auto new_size = pos == 0 ? 1 : pos + 1;
         buffer.resize(new_size);
     }
 }
