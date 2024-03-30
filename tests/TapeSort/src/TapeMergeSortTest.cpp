@@ -2,7 +2,7 @@
 #include "VectorTape.h"
 #include <gtest/gtest.h>
 
-class TapeSortTest : public testing::Test
+class TapeMergeSortTest : public testing::Test
 {
 protected:
     void SetUp() override
@@ -28,7 +28,7 @@ private:
     }
 };
 
-TEST_F(TapeSortTest, sortTestWithThreeInterm)
+TEST_F(TapeMergeSortTest, sortTestWithThreeInterm)
 {
     tape::TapeMergeSort sorter(source, destination, 7);
     for (int i = 0; i < 3; ++i) {
@@ -46,7 +46,7 @@ TEST_F(TapeSortTest, sortTestWithThreeInterm)
     EXPECT_FALSE(destination->peek(value));
 }
 
-TEST_F(TapeSortTest, sortTestWithOneInterm)
+TEST_F(TapeMergeSortTest, sortTestWithOneInterm)
 {
     tape::TapeMergeSort sorter(source, destination, 7);
     auto interm = std::make_shared<tape::VectorTape>();

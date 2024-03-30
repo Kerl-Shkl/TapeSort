@@ -7,7 +7,7 @@ function(create_tapesort_test SOURCE_NAME)
 endfunction()
 
 set(TEST_FILES MergeTapesTest.cpp TapeSortMergeToDestinationTest.cpp
-    TapeSortMergeToIntermTest.cpp TapeSortTest.cpp)
+    TapeSortMergeToIntermTest.cpp TapeMergeSortTest.cpp TapeInsertSortTest.cpp)
 foreach(TEST_FILE ${TEST_FILES})
     create_tapesort_test(${TEST_FILE})
 endforeach()

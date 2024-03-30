@@ -1,5 +1,5 @@
-#ifndef TAPESORTALGORITHM_INCLUDE_TAPEMERGESORT_H
-#define TAPESORTALGORITHM_INCLUDE_TAPEMERGESORT_H
+#ifndef TAPESORT_INCLUDE_TAPEMERGESORT_H
+#define TAPESORT_INCLUDE_TAPEMERGESORT_H
 
 #include "ITape.h"
 #include <memory>
@@ -52,4 +52,4 @@ private:
 
 }  // namespace tape
 
-#endif  // end of include guard: TAPESORTALGORITHM_INCLUDE_TAPEMERGESORT_H
+#endif  // end of include guard: TAPESORT_INCLUDE_TAPEMERGESORT_H
