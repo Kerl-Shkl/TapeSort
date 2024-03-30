@@ -13,7 +13,7 @@ public:
     Application(int argc, char *argv[]);
     void run();
 
-private:
+public:
     bool parseArgs(int argc, char *argv[]);
     void printUsage(const std::string& exec_name);
     void createTapes();

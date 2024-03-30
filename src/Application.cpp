@@ -21,7 +21,7 @@ Application::Application(int argc, char *argv[])
 
 bool Application::parseArgs(int argc, char *argv[])
 {
-    if (argc != 3 || argc != 5) {
+    if (argc != 3 && argc != 5) {
         return false;
     }
     sourceFilename = argv[1];
@@ -40,7 +40,7 @@ void Application::printUsage(const std::string& exec_name)
 {
     std::cout
         << "Usage: " << exec_name
-        << "source destination [--settings filename (default = settings.txt)]"
+        << " source destination [--settings filename (default = settings.txt)]"
         << std::endl;
 }
 

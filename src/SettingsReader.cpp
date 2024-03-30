@@ -6,6 +6,10 @@ static void ltrim(std::string& s);
 static void rtrim(std::string& s);
 static void trim(std::string& s);
 
+SettingsReader::SettingsReader(const std::string& filename)
+: filename(filename)
+{}
+
 const Settings& SettingsReader::getSettings()
 {
     std::ifstream in(filename);
@@ -24,7 +28,7 @@ void SettingsReader::parseLine(const std::string& line)
 {
     const auto separator = line.find(':');
     std::string field = line.substr(0, separator);
-    std::string valueStr = line.substr(separator, line.size());
+    std::string valueStr = line.substr(separator+1, line.size());
     trim(field);
     trim(valueStr);
     uint32_t value = std::stoul(valueStr);
