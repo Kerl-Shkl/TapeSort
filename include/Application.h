@@ -13,7 +13,7 @@ public:
     Application(int argc, char *argv[]);
     void run();
 
-public:
+private:
     using TapePtr = std::shared_ptr<tape::TapeTimeModel>;
 
     void doSort();

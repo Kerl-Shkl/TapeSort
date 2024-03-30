@@ -7,7 +7,7 @@
 struct Settings
 {
     using milliseconds = std::chrono::milliseconds;
-    uint32_t intermTapeCount = 1;
+    uint32_t intermTapeCount = 0;
     uint32_t memoryCapacity = 100;
     milliseconds stepDelay = {};
     milliseconds readDelay = {};

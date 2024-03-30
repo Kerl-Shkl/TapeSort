@@ -1,6 +1,6 @@
-interm_tape_count: 5
-memory_capacity: 14
-step_delay: 5
-read_delay: 5
-write_delay: 5
-rewind_delay: 7
+interm_tape_count: 1
+memory_capacity: 200
+step_delay: 3
+read_delay: 3
+write_delay: 3
+rewind_delay: 4
