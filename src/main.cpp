@@ -4,12 +4,14 @@
 int main(int argc, char *argv[])
 {
     Application app(argc, argv);
-    std::cout << app.settings.intermTapeCount << std::endl;
-    std::cout << app.settings.memoryCapacity << std::endl;
-    std::cout << app.settings.readDelay.count() << std::endl;
-    std::cout << app.settings.writeDelay.count() << std::endl;
-    std::cout << app.settings.stepDelay.count() << std::endl;
-    std::cout << app.settings.rewindDelay.count() << std::endl;
+    app.run();
+
+    // std::cout << app.settings.intermTapeCount << std::endl;
+    // std::cout << app.settings.memoryCapacity << std::endl;
+    // std::cout << app.settings.readDelay.count() << std::endl;
+    // std::cout << app.settings.writeDelay.count() << std::endl;
+    // std::cout << app.settings.stepDelay.count() << std::endl;
+    // std::cout << app.settings.rewindDelay.count() << std::endl;
 
     // using namespace std::chrono_literals;
     // std::ofstream file("test_file");

@@ -4,7 +4,11 @@ namespace tape {
 
 FileTape::FileTape(std::fstream&& tapeFile)
 : file(std::move(tapeFile))
-{}
+{
+    file.seekg(0, std::ios_base::end);
+    actualEnd = file.tellg();
+    file.seekg(0, std::ios_base::beg);
+}
 
 bool FileTape::read(uint32_t& buffer)
 {
@@ -71,7 +75,9 @@ bool FileTape::clear()
 void FileTape::setFstream(std::fstream&& stream)
 {
     file = std::move(stream);
+    file.seekg(0, std::ios_base::end);
     actualEnd = file.tellg();
+    file.seekg(0, std::ios_base::beg);
 }
 
 bool FileTape::isOkStateAndClear()

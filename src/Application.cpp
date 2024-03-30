@@ -20,6 +20,9 @@ void Application::run()
 {
     createTapes();
     TapeSort sorter(source, destination, settings.memoryCapacity);
+    for (const auto& interm : intermTapes) {
+        sorter.addIntermTape(interm);
+    }
     sorter.sort();
 }
 
@@ -52,14 +55,15 @@ void Application::createTapes()
 {
     using std::ios_base;
     std::ofstream{destinationFilename};  // create dest file
-    std::fstream srcStream(sourceFilename,
-                           ios_base::in | ios_base::out | ios_base::binary);
+    std::fstream srcStream(sourceFilename, ios_base::in | ios_base::out |
+                                               ios_base::binary |
+                                               ios_base::ate);
     if (!srcStream.is_open()) {
         std::cerr << "Can't open source file: " << sourceFilename << std::endl;
         exit(3);
     }
     std::fstream dstStream(destinationFilename,
-                           ios_base::in | ios_base::out | ios_base::binary);
+                           ios_base::in | ios_base::out | ios_base::binary | ios_base::trunc);
     if (!dstStream.is_open()) {
         std::cerr << "Can't open destination file: " << destinationFilename
                   << std::endl;
@@ -71,7 +75,7 @@ void Application::createTapes()
     setTimeSettings(source);
 
     auto dstFileTape = std::make_unique<tape::FileTape>(std::move(dstStream));
-    destination = std::make_shared<tape::TapeTimeModel>(std::move(srcFileTape));
+    destination = std::make_shared<tape::TapeTimeModel>(std::move(dstFileTape));
     setTimeSettings(destination);
 
     createIntermTapes();
@@ -81,19 +85,22 @@ void Application::createIntermTapes()
 {
     namespace fs = std::filesystem;
     using std::ios_base;
-    if (!fs::exists("tmp") || !fs::is_directory("tmp")) {
-        bool created = fs::create_directory("temp");
+    if (!(fs::exists("tmp") && fs::is_directory("tmp"))) {
+        bool created = fs::create_directory("tmp");
         if (!created) {
-            std::cerr << "Can't create directory \"temp\"" << std::endl;
+            std::cerr << "Can't create directory \"tmp\"" << std::endl;
             exit(4);
         }
     }
-    const std::string commonFilename = "tmp/interm";
+    const auto commonFilename = fs::path("tmp") / "interm";
     for (uint32_t i = 0; i < settings.intermTapeCount; ++i) {
-        std::string filename = commonFilename + std::to_string(i + 1);
-        std::ofstream{filename, ios_base::trunc};
-        std::fstream stream(filename,
-                            ios_base::in | ios_base::out | ios_base::binary);
+        const auto filename = commonFilename.string() + std::to_string(i + 1);
+        std::fstream stream(filename, ios_base::in | ios_base::out |
+                                          ios_base::binary | ios_base::trunc);
+        if (!stream.is_open()) {
+            std::cerr << "Can't create interm tape file" << std::endl;
+            exit(5);
+        }
         auto fileTape = std::make_unique<tape::FileTape>(std::move(stream));
         auto timeTape =
             std::make_shared<tape::TapeTimeModel>(std::move(fileTape));
